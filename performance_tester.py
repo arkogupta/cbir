@@ -15,25 +15,56 @@ index_file = args['index']
 layer_name = args['layer']
 dataset = args['dataset']
 
-score = 0
-image_count = 0
-for image_path in glob.glob(dataset + os.path.sep + "*.*"):
-    # print(image_path)
-    image_id = int(image_path[image_path.rfind('h') + 1: image_path.rfind('.')])
-    # print(image_id)
-    results = get_results(image_path, index_file, layer_name)
-    base = (image_id//4)*4
-    group_ids = set()
-    for i in range(0,4):
-        group_ids.add(base + i)
 
-    for i in range(0,4):
-        (dist, imageName) = results[i]
-        result_image_id = int(imageName[imageName.rfind('h') + 1: image_path.rfind('.')])
-        if result_image_id in group_ids:
-            score += 1
-    image_count += 1
 
-score = score/image_count
+
+def test_without_faiss():
+
+    score = 0
+    image_count = 0
+    for image_path in glob.glob(dataset + os.path.sep + "*.*"):
+        # print(image_path)
+        image_id = int(image_path[image_path.rfind('h') + 1: image_path.rfind('.')])
+        # print(image_id)
+        results = get_results(image_path, index_file)
+        base = (image_id//4)*4
+        group_ids = set()
+        for i in range(0,4):
+            group_ids.add(base + i)
+
+        for i in range(0,4):
+            (dist, imageName) = results[i]
+            # print(imageName)
+            result_image_id = int(imageName[: imageName.rfind('.')])
+            if result_image_id in group_ids:
+                score += 1
+        image_count += 1
+
+    score = score/image_count
+    return score
+
+
+def test_with_faiss():
+
+    res = get_results_faiss()
+    score = 0
+    image_count = res.size()
+
+    for i in range(image_count):
+        closest_images = res[i]
+        base = (i // 4) * 4
+        group_ids = set()
+        for i in range(0, 4):
+            group_ids.add(base + i)
+
+        for j in range(0, 4):
+            if closest_images[j] in group_ids:
+                    score += 1
+
+
+    score = score/image_count
+    return score
+
+
+score = test_with_faiss()
 print("Accuracy : %.3f" % score)
-
