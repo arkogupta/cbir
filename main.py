@@ -2,12 +2,12 @@ import numpy as np
 import argparse
 import cv2
 from searcher import Searcher
-from feature_extractor import get_features
+# from feature_extractor import get_features
 import h5py
 import datetime
 # import glob
 import os
-
+import faiss_index
 
 # Parse the arguments
 ap = argparse.ArgumentParser()
@@ -22,7 +22,11 @@ args = vars(ap.parse_args())
 _img_path = args['query']
 _index_file = args['index']
 _dataset = args['dataset']
-
+#this string is currently hard coded 
+idx = faiss_index.build_index(_index_file)
+print('indexing successfully done...\n')
+feature_file = h5py.File(_index_file,'r').items()
+print('feature file in memory...\n')
 
 def get_results(img_path, index_file):
     # init dict of results and retrieve query features
@@ -44,9 +48,18 @@ def get_results(img_path, index_file):
     return results
 
 # @Dinesh to complete this
-def get_results_faiss(img_path, index_file):
-
-
+def get_results_faiss(img_path):
+    print('trying to fetch results for ',img_path,'...\n')
+    i = img_path[img_path.rfind('h')+1:]
+    i = i[:i.rfind('.')]
+    i = int(i)
+    feature = feature_file[i][1]
+    query = np.zeros((1,25088))
+    query[0] = np.float32(feature)
+    query = np.float32(query)
+    (score,j) = idx.search(query,8)
+    results = zip(score[0],j[0])
+    print('results are ready to be processed...\n')
     return results
 
 
@@ -57,7 +70,8 @@ query_image = cv2.resize(query_image, (400, 166))
 cv2.imshow("Query", query_image)
 print("query: %s" % _img_path)
 start = datetime.datetime.now()
-results = get_results(_img_path, _index_file)
+# results = get_results(_img_path, _index_file)
+results = get_results_faiss(_img_path)
 
 total_time = (datetime.datetime.now() - start).total_seconds()
 print("Time taken : %f seconds" %(total_time))
@@ -71,7 +85,9 @@ for j in range(0, 8):
     # grab the result (we are using row-major order) and
     # load the result image
     (score, imageName) = results[j]
-    path = _dataset + os.path.sep + "ukbench" + "%s" % imageName
+    imageName = '0000000' + str(imageName)
+    imageName = imageName[imageName.__len__()-5:]
+    path = _dataset + os.path.sep + "ukbench" + "%s.jpg" % imageName
     print(path)
     result = cv2.imread(path)
     result = cv2.resize(result, (400, 166))
