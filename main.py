@@ -2,7 +2,7 @@ import numpy as np
 import argparse
 import cv2
 from searcher import Searcher
-# from feature_extractor import get_features
+from feature_extractor import get_features
 import h5py
 import datetime
 # import glob
@@ -25,8 +25,7 @@ _dataset = args['dataset']
 #this string is currently hard coded 
 idx = faiss_index.build_index(_index_file)
 print('indexing successfully done...\n')
-feature_file = h5py.File(_index_file,'r').items()
-print('feature file in memory...\n')
+
 
 def get_results(img_path, index_file):
     # init dict of results and retrieve query features
@@ -47,18 +46,16 @@ def get_results(img_path, index_file):
     results = sorted([(v, k) for (k, v) in results.items()])
     return results
 
-# @Dinesh to complete this
+
 def get_results_faiss(img_path):
     print('trying to fetch results for ',img_path,'...\n')
-    i = img_path[img_path.rfind('h')+1:]
-    i = i[:i.rfind('.')]
-    i = int(i)
-    feature = feature_file[i][1]
+    i = int(img_path[img_path.rfind('h')+1:img_path.rfind('.')])
+    query_features = get_features(img_path)
     query = np.zeros((1,25088))
-    query[0] = np.float32(feature)
+    query[0] = np.float32(query_features)
     query = np.float32(query)
     (score,j) = idx.search(query,8)
-    results = zip(score[0],j[0])
+    results = zip(score[0], j[0])
     print('results are ready to be processed...\n')
     return results
 
