@@ -3,7 +3,7 @@ import h5py
 import numpy as np
 import argparse
 """
-    creates a faiss index object which will be accessed by 'idx'
+    creates a faiss index object
 """
 
 def build_index(feature_file):
