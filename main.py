@@ -1,15 +1,16 @@
-import numpy as np
-import argparse
-import cv2
-from searcher import Searcher
-from feature_extractor import get_features
-import h5py
-import datetime
+# import datetime
 # import glob
-import os
+# import os
+# import argparse
+# import cv2
+from searcher import Searcher
+# from feature_extractor import get_features
+# import h5py
+# import numpy as np
 import faiss_index
 
 # Parse the arguments
+'''
 ap = argparse.ArgumentParser()
 ap.add_argument('-q', '--query', required=True, help='Path to the query image')
 ap.add_argument('-i', '--index', required=True, help='Path to the index file')
@@ -22,11 +23,15 @@ args = vars(ap.parse_args())
 _img_path = args['query']
 _index_file = args['index']
 _dataset = args['dataset']
-#this string is currently hard coded 
-idx = faiss_index.build_index(_index_file)
+'''
+
+
+# this string is currently hard coded
+_index_file = 'index_debug.hdf5'
+idx, xq = faiss_index.build_index(_index_file)
 print('indexing successfully done...\n')
 
-
+'''
 def get_results(img_path, index_file):
     # init dict of results and retrieve query features
 
@@ -45,9 +50,11 @@ def get_results(img_path, index_file):
     # sort the results by distance from query image
     results = sorted([(v, k) for (k, v) in results.items()])
     return results
+'''
 
 
-def get_results_faiss(img_path):
+def get_results_faiss():
+    '''
     print('trying to fetch results for ',img_path,'...\n')
     i = int(img_path[img_path.rfind('h')+1:img_path.rfind('.')])
     query_features = get_features(img_path)
@@ -58,8 +65,14 @@ def get_results_faiss(img_path):
     results = zip(score[0], j[0])
     print('results are ready to be processed...\n')
     return results
+    '''
+
+    # code for performance tester (multiple queries)
+    dist_matrix, ind_matrix = idx.search(xq,4)
+    return ind_matrix
 
 
+'''
 # load the query image and show it
 
 query_image = cv2.imread(_img_path)
@@ -107,3 +120,4 @@ for j in range(0, 8):
 cv2.imshow("Results 1-4", groupA)
 cv2.imshow("Results 5-8", groupB)
 cv2.waitKey(0)
+'''
