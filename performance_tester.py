@@ -1,8 +1,9 @@
 import argparse
 import glob
-from main import get_results
+from main import get_results_faiss
 import os
 
+'''
 ap = argparse.ArgumentParser()
 # ap.add_argument('-q', '--query', required=True, help='Path to the query image')
 ap.add_argument('-i', '--index', required=True, help='Path to the index file')
@@ -15,9 +16,7 @@ index_file = args['index']
 layer_name = args['layer']
 dataset = args['dataset']
 
-
-
-
+'''
 def test_without_faiss():
 
     score = 0
@@ -48,7 +47,7 @@ def test_with_faiss():
 
     res = get_results_faiss()
     score = 0
-    image_count = res.size()
+    image_count = 10200
 
     for i in range(image_count):
         closest_images = res[i]
@@ -67,4 +66,8 @@ def test_with_faiss():
 
 
 score = test_with_faiss()
+score_string = "Accuracy : %.4f" % score
+with open('accuracy.txt','w') as f:
+    f.write(score_string)
+
 print("Accuracy : %.3f" % score)
