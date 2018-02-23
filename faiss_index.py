@@ -6,11 +6,12 @@ import argparse
     creates a faiss index object
 """
 
+
 def build_index(feature_file):
-    h = h5py.File(feature_file,'r')
+    h = h5py.File(feature_file, 'r')
     itms = h.items()
     m = itms.__len__()
-    #currently hardcoded     
+    # currently hardcoded
     dim = 25088
     xb = np.zeros((m,dim))
     i = 0
@@ -20,4 +21,4 @@ def build_index(feature_file):
     xb = np.float32(xb)
     idx = faiss.IndexFlatL2(dim)
     idx.add(xb)
-    return idx
+    return idx,xb
