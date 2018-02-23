@@ -53,13 +53,12 @@ def test_with_faiss():
         closest_images = res[i]
         base = (i // 4) * 4
         group_ids = set()
-        for i in range(0, 4):
-            group_ids.add(base + i)
+        for j in range(0, 4):
+            group_ids.add(base + j)
 
         for j in range(0, 4):
             if closest_images[j] in group_ids:
                     score += 1
-
 
     score = score/image_count
     return score
