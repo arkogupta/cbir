@@ -1,23 +1,19 @@
-# import datetime
-# import glob
-# import os
-# import argparse
-# import cv2
-from searcher import Searcher
-# from feature_extractor import get_features
-# import h5py
-# import numpy as np
+import os
+import cv2
+import h5py
+import glob
+import datetime
+import argparse
+import numpy as np
 import faiss_index
-
+from feature_extractor import get_feature_file
 # Parse the arguments
 '''
 ap = argparse.ArgumentParser()
 ap.add_argument('-q', '--query', required=True, help='Path to the query image')
 ap.add_argument('-i', '--index', required=True, help='Path to the index file')
-# ap.add_argument("-l", "--layer", required=True, help="Name of the layer from which features are to be extracted")
 ap.add_argument("-d", "--dataset", required=True, help="Path to the directory that contains images to be indexed")
 args = vars(ap.parse_args())
-
 
 # get info from the arguments
 _img_path = args['query']
@@ -25,13 +21,17 @@ _index_file = args['index']
 _dataset = args['dataset']
 '''
 
-
-# this string is currently hard coded
-_index_file = 'index_debug.hdf5'
-idx, xq = faiss_index.build_index(_index_file)
+# performance tester
+_index_file = '/home/dinesh/Documents/pca_index_debug.hdf5'
+_dataset = '/media/dinesh/dinesh/C/Documents/BTP/ukbench/ukbench/full'
+_img_path = 0
+itms,idx = faiss_index.build_index(_index_file)
 print('indexing successfully done...\n')
 
 '''
+
+    Deprecated function using L2 without indexing
+
 def get_results(img_path, index_file):
     # init dict of results and retrieve query features
 
@@ -48,41 +48,68 @@ def get_results(img_path, index_file):
         dist = searcher.euclidian_distance(query_features, features)
         results[file_name] = dist
     # sort the results by distance from query image
-    results = sorted([(v, k) for (k, v) in results.items()])
+    results = sorted([(v, k) for (k, `v) in results.items()])
     return results
 '''
 
+# code for finding top 8 out of 100
+# def get_better_results(itms,results):
+def get_better_results(results):
+    # (score,index)
+    better_results = np.zeros((len(results),2))
+    # query_image_feature = np.float32(itms[int(_img_path[_img_path.rfind('h')+1:_img_path.rfind('.')])])
+    global _img_path
+    query_image_feature = np.float32(itms[_img_path])
+    _img_path += 1
+    print _img_path
+    result_feature = (np.float32(itms[idx]) for score,idx in results)
+    from itertools import starmap,izip
+    better_results[:,0] = np.fromiter(starmap(lambda x,y:(np.sum(abs(i-j) for i,j in izip(x,y))),izip((query_image_feature for i in xrange(len(results))), result_feature)),'float32')
+    better_results[:,1] = np.fromiter((idx for score,idx in results),'int')
+    better_results.sort(axis=0,kind='mergesort')
+    # return better_results[:8]
+    return better_results[:4, 1]
 
 def get_results_faiss():
-    '''
-    print('trying to fetch results for ',img_path,'...\n')
-    i = int(img_path[img_path.rfind('h')+1:img_path.rfind('.')])
-    query_features = get_features(img_path)
-    query = np.zeros((1,25088))
-    query[0] = np.float32(query_features)
-    query = np.float32(query)
-    (score,j) = idx.search(query,8)
-    results = zip(score[0], j[0])
-    print('results are ready to be processed...\n')
-    return results
-    '''
+    
+    # print 'trying to fetch results for',_img_path,'...\n'
+    # i = int(_img_path[_img_path.rfind('h')+1:_img_path.rfind('.')])
+    # itms = get_feature_file(_index_file)
+    # # print itms.shape
+    # query_features = itms[i]
+    # query = np.zeros((1,6272))
+    # query[0] = np.float32(query_features)
+    # query = np.float32(query)
+    # # 100 hence trying to find 8 out of 100
+    # (score,j) = idx.search(query,100)
+    # # (score,index)
+    # results = zip(score[0], j[0])
+    # results = get_better_results(itms,results)
+    # return results
 
     # code for performance tester (multiple queries)
-    dist_matrix, ind_matrix = idx.search(xq,4)
-    return ind_matrix
+    dist_matrix, ind_matrix = idx.search(itms,100)
+    gen_dist = (arr for arr in dist_matrix)
+    gen_ind = (arr for arr in ind_matrix)
+    results = map(zip,gen_dist,gen_ind)
+    better_results = map(get_better_results,(arr for arr in results))
+    # print better_results.shape
+    # from itertools import chain
+    # ind_matrix = np.fromiter(chain.from_iterable(idx for score, idx in (arr for arr in better_results)), 'int')
+    # ind_matrix.shape = len(itms), 4
+    return better_results
 
 
 '''
 # load the query image and show it
-
 query_image = cv2.imread(_img_path)
 query_image = cv2.resize(query_image, (400, 166))
 cv2.imshow("Query", query_image)
-print("query: %s" % _img_path)
+print("Query: %s" % _img_path)
 start = datetime.datetime.now()
-# results = get_results(_img_path, _index_file)
-results = get_results_faiss(_img_path)
 
+results = get_results_faiss()
+print('results are ready to be processed...\n')
 total_time = (datetime.datetime.now() - start).total_seconds()
 print("Time taken : %f seconds" %(total_time))
 
@@ -96,13 +123,12 @@ for j in range(0, 8):
     # load the result image
     (score, imageName) = results[j]
     imageName = '0000000' + str(imageName)
+    imageName = imageName[:imageName.rfind('.')]
     imageName = imageName[imageName.__len__()-5:]
     path = _dataset + os.path.sep + "ukbench" + "%s.jpg" % imageName
     print(path)
     result = cv2.imread(path)
     result = cv2.resize(result, (400, 166))
-
-    # print(path, result)
 
     print("\t%d. %s : %.3f" % (j + 1, imageName, score))
 
@@ -120,4 +146,5 @@ for j in range(0, 8):
 cv2.imshow("Results 1-4", groupA)
 cv2.imshow("Results 5-8", groupB)
 cv2.waitKey(0)
+
 '''
