@@ -93,10 +93,6 @@ def get_results_faiss():
     gen_ind = (arr for arr in ind_matrix)
     results = map(zip,gen_dist,gen_ind)
     better_results = map(get_better_results,(arr for arr in results))
-    # print better_results.shape
-    # from itertools import chain
-    # ind_matrix = np.fromiter(chain.from_iterable(idx for score, idx in (arr for arr in better_results)), 'int')
-    # ind_matrix.shape = len(itms), 4
     return better_results
 
 
