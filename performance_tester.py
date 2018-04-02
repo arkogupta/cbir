@@ -47,7 +47,7 @@ def test_with_faiss():
 
     res = get_results_faiss()
     score = 0
-    image_count = 10200
+    image_count = len(res)
 
     for i in range(image_count):
         closest_images = res[i]
