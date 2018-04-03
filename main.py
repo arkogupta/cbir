@@ -61,12 +61,15 @@ def get_better_results(results):
     global _img_path
     query_image_feature = np.float32(itms[_img_path])
     _img_path += 1
-    print _img_path
+    # print _img_path
     result_feature = (np.float32(itms[idx]) for score,idx in results)
     from itertools import starmap,izip
-    better_results[:,0] = np.fromiter(starmap(lambda x,y:(np.sum(abs(i-j) for i,j in izip(x,y))),izip((query_image_feature for i in xrange(len(results))), result_feature)),'float32')
-    better_results[:,1] = np.fromiter((idx for score,idx in results),'int')
-    better_results.sort(axis=0,kind='mergesort')
+    func = lambda x,y:(np.sum(abs(i-j) for i,j in izip(x,y)))
+    temp = izip((query_image_feature for i in xrange(len(results))), result_feature)
+    better_results[:,0] = np.fromiter(starmap(func,temp),'float32')
+    # better_results[:,1] = np.fromiter((idx for score,idx in results),'int')
+    better_results[:,1] = np.array(results)[:,1]
+    better_results[better_results[:,0].argsort()]
     # return better_results[:8]
     return better_results[:4, 1]
 
