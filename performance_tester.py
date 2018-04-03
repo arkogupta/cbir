@@ -59,14 +59,14 @@ def test_with_faiss():
         for j in range(0, 4):
             if closest_images[j] in group_ids:
                     score += 1
-
+    score = float(score)
     score = score/image_count
     return score
 
 
 score = test_with_faiss()
-score_string = "Accuracy : %.4f" % score
-with open('accuracy.txt','w') as f:
+score_string = "Accuracy for dataset PCA(/4) ukbench(Full) : %.4f" % score
+with open('accuracy.txt','a') as f:
     f.write(score_string)
 
 print("Accuracy : %.3f" % score)
