@@ -1,0 +1,11 @@
+Accuracy : 2.1102
+Accuracy for dataset PCA(/4) ukbench(118) : 2.2966
+Accuracy for dataset PCA(/4) ukbench(118) w/o top 8 : 2.1102
+Accuracy for dataset PCA(/4) ukbench(full) : 1.4962
+Accuracy for dataset PCA(/4) ukbench(full) w/o top 8 : 2.1418
+Accuracy for dataset index_debug w/o top 8 : 2.0856
+Accuracy for dataset features_ukbench_hsv.hdf5 : 2.4108
+Accuracy for dataset features_ukbench_hsv.hdf5 w/o top 8: 2.4108
+Accuracy for dataset features_ukbench_hsv_vgg : 1.7357
+Accuracy for dataset features_ukbench_hsv_vgg w/o top 8 : 2.0856
+Accuracy for dataset PCA(/4) ukbench(full) (bug removed in impure): 2.1418
