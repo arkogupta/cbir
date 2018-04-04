@@ -1,9 +1,9 @@
-import os
-import cv2
-import h5py
-import glob
-import datetime
-import argparse
+# import os
+# import cv2
+# import h5py
+# import glob
+# import datetime
+# import argparse
 import numpy as np
 import faiss_index
 from feature_extractor import get_feature_file
@@ -64,12 +64,12 @@ def get_better_results(results):
     # print _img_path
     result_feature = (np.float32(itms[idx]) for score,idx in results)
     from itertools import starmap,izip
-    func = lambda x,y:(np.sum(abs(i-j) for i,j in izip(x,y)))
+    func = lambda x,y:(np.sqrt(np.sum(np.square(abs(x-y)))))
     temp = izip((query_image_feature for i in xrange(len(results))), result_feature)
     better_results[:,0] = np.fromiter(starmap(func,temp),'float32')
     # better_results[:,1] = np.fromiter((idx for score,idx in results),'int')
     better_results[:,1] = np.array(results)[:,1]
-    better_results[better_results[:,0].argsort()]
+    better_results = better_results[better_results[:,0].argsort()]
     # return better_results[:8]
     return better_results[:4, 1]
 
