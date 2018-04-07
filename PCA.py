@@ -18,3 +18,26 @@ def apply_pca(feature_file,reduced_dims = 6272):
     evecs = evecs[:,idx]
     evecs = evecs[:,:reduced_dims]
     return np.dot(data,evecs)
+
+# For testing PCA unquote following code
+
+from datetime import datetime
+feature_file = '/home/da_230896/index_debug.hdf5'
+start = datetime.now()
+reduced_dim = 10114
+idx = apply_pca(feature_file,reduced_dim)
+print("PCA working fine...")
+print("Time taken: %f secs" % (datetime.now() - start).total_seconds())
+
+# f = h5py.File('/output/pca_index.hdf5','w')
+# with h5py.File('/home/da_230896/Documents/cbir/pca_index_debug.hdf5','w') as f:
+#     f.create_dataset("PCA on Ukbench",data = idx)
+
+output = '/home/da_230896/pca_index_debug.hdf5'
+for imagePath in xrange(10200):
+    # extract our unique image ID (i.e. the filename)
+    # k = imagePath[imagePath.rfind('h') + 1:]
+    k = str(imagePath) + '.jpg'
+    features = idx[imagePath]
+    with h5py.File(output, 'a') as h:
+        h.create_dataset(k, data=features)

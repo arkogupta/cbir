@@ -1,4 +1,4 @@
-Accuracy : 2.1102
+WITH FAISS
 Accuracy for dataset PCA(/4) ukbench(118) : 2.2966
 Accuracy for dataset PCA(/4) ukbench(118) w/o top 8 : 2.1102
 Accuracy for dataset PCA(/4) ukbench(full) : 1.4962
