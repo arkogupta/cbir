@@ -1,5 +1,5 @@
 import numpy as np
-
+from scipy import spatial
 
 class Searcher:
     # def __init__(self):
@@ -13,8 +13,12 @@ class Searcher:
 
         return d
 
-    def euclidian_distance(self, f_vector_a, f_vector_b):
+    def manhattan_distance(self, f_vector_a, f_vector_b):
         d = np.sum([abs(a-b) for (a,b) in zip(f_vector_a, f_vector_b)])
+        return d
+    
+    def cosine_distance(self, f_vector_a, f_vector_b):
+        d = spatial.distance.cosine(f_vector_a, f_vector_b)
         return d
 
     '''
