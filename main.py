@@ -6,7 +6,7 @@
 # import argparse
 import numpy as np
 import faiss_index
-from feature_extractor import get_feature_file
+# from feature_extractor import get_feature_file
 # Parse the arguments
 '''
 ap = argparse.ArgumentParser()
@@ -22,7 +22,7 @@ _dataset = args['dataset']
 '''
 
 # performance tester
-_index_file = '/home/dinesh/Documents/pca_index_debug.hdf5'
+_index_file = '/home/dinesh/Documents/pca6632dim_features_norm_hsv_vgg_ukbench_sklearn.hdf5'
 _dataset = '/media/dinesh/dinesh/C/Documents/BTP/ukbench/ukbench/full'
 _img_path = 0
 itms,idx = faiss_index.build_index(_index_file)
@@ -64,9 +64,10 @@ def get_better_results(results):
     # print _img_path
     result_feature = (np.float32(itms[idx]) for score,idx in results)
     from itertools import starmap,izip
-    func = lambda x,y:(np.sqrt(np.sum(np.square(abs(x-y)))))
+    # distance = lambda x,y:(np.sqrt(np.sum(np.square(abs(x-y)))))
+    distance = lambda x,y : 1 - np.inner(x,y)/(np.sqrt(np.inner(x,x))*np.sqrt(np.inner(y,y)))
     temp = izip((query_image_feature for i in xrange(len(results))), result_feature)
-    better_results[:,0] = np.fromiter(starmap(func,temp),'float32')
+    better_results[:,0] = np.fromiter(starmap(distance,temp),'float32')
     # better_results[:,1] = np.fromiter((idx for score,idx in results),'int')
     better_results[:,1] = np.array(results)[:,1]
     better_results = better_results[better_results[:,0].argsort()]
@@ -95,6 +96,7 @@ def get_results_faiss():
     gen_dist = (arr for arr in dist_matrix)
     gen_ind = (arr for arr in ind_matrix)
     results = map(zip,gen_dist,gen_ind)
+    # return np.array(results)[:, :4, 1]
     better_results = map(get_better_results,(arr for arr in results))
     return better_results
 

@@ -2,17 +2,31 @@ WITH FAISS
 Accuracy for dataset PCA(/4) ukbench(118) : 2.2966
 Accuracy for dataset PCA(/4) ukbench(118) w/o top 8 : 2.1102
 Accuracy for dataset PCA(/4) ukbench(full) : 1.4962
+Accuracy for dataset PCA(/4) ukbench(full) (bug removed in impure): 2.1418
 Accuracy for dataset PCA(/4) ukbench(full) w/o top 8 : 2.1418
-Accuracy for dataset index_debug w/o top 8 : 2.0856
-Accuracy for dataset features_ukbench_hsv.hdf5 : 2.4108
+Accuracy for dataset PCA(/4) ukbench(full) (FaissIP,wth IP top 8): 3.1814 (Time taken : 28.274462 seconds)
+Accuracy for dataset ukbench(full) (vgg,FaissL2,w/o top 8) : 2.0856
+Accuracy for dataset ukbench(full) (vgg,FaissIP,w/o IP top 8): 2.6144 (Time taken : 72.226941 seconds)
+Accuracy for dataset ukbench(full) (vgg,FaissIP,with IP top 8): 3.1412 (Time taken : 111.330623 seconds)
+Accuracy for dataset features_ukbench_hsv.hdf5 (vgg,FaissL2,L2 top 8): 2.4108
+Accuracy for dataset features_ukbench_hsv (vgg,FaissIP,IP top 8): 2.4108 (Time taken : 14.933291 seconds)
 Accuracy for dataset features_ukbench_hsv.hdf5 w/o top 8: 2.4108
 Accuracy for dataset features_ukbench_hsv_vgg : 1.7357
 Accuracy for dataset features_ukbench_hsv_vgg w/o top 8 : 2.0856
-Accuracy for dataset PCA(/4) ukbench(full) (bug removed in impure): 2.1418
-
-
+Accuracy for dataset PCA(10114 dim) norm_hsv_vgg_ukbench (FaissIP,IP top 8): 2.1625 (Time taken : 40.063984 seconds)
+Accuracy for dataset PCA(10114 dim) norm_hsv_vgg_ukbench (FaissIP,w/o top 8): 2.1219 (Time taken : 21.444124 seconds)
+Accuracy for dataset PCA(3316 dim sklearn) norm_hsv_vgg_ukbench (FaissIP,wth IP top 8): 2.1663 (Time taken : 20.243393 seconds)
+Accuracy for dataset PCA(6632 dim sklearn) norm_hsv_vgg_ukbench (FaissIP,wth IP top 8): 2.1593 (Time taken : 28.897360 seconds)
+Accuracy for dataset PCA(10114 dim) ukbench(full) (vgg,FaissL2,with L2 top 8): 1.4510
+Accuracy for dataset PCA(10114 dim) ukbench(full) (vgg,FaissL2,w/o L2 top 8): 1.4510 (Time taken : 24.133666 seconds)
+Accuracy for dataset PCA(10114 dim) ukbench(full) (vgg,FaissIP,L2 top 8): 1.6540
+Accuracy for dataset PCA(10114 dim) ukbench(full) (vgg,FaissIP,w/o top 8): 1.8345 (Time taken : 20.66 seconds) // This attribute is because of L2 nature of top 8
+Accuracy for dataset PCA(10114 dim) ukbench(full) (vgg,FaissIP,with IP top 8): 1.9273 (Time taken : 39.70 seconds)
+Accuracy for dataset pca(10114 dim sklearn) ukbench(full) (FaissIP,IP top 8): 2.0820 (Time taken : 40.912059 seconds)
+Accuracy for dataset PCA(10114 dim sklearn) ukbench(full) (FaissIP,w/o IP top 8): 1.9758 (Time taken : 23.432511 seconds)
 
 
 WITHOUT FAISS:
 Accuracy for dataset ukbench(full) hsv (Manhattan) : 2.5809
 Accuracy for dataset ukbench(full) hsv (Cosine) : 2.411
+Accuracy for dataset ukbench(full) hsv_vgg (non faiss,non pca,cosine): 2.1578

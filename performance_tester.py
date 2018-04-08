@@ -1,8 +1,8 @@
-import argparse
+# import argparse
 import glob
 from main import get_results_faiss
 import os
-
+from datetime import datetime
 '''
 ap = argparse.ArgumentParser()
 # ap.add_argument('-q', '--query', required=True, help='Path to the query image')
@@ -42,9 +42,8 @@ def test_without_faiss():
     score = score/image_count
     return score
 
-
+start = datetime.now()
 def test_with_faiss():
-
     res = get_results_faiss()
     score = 0
     image_count = len(res)
@@ -65,8 +64,10 @@ def test_with_faiss():
 
 
 score = test_with_faiss()
-score_string = "Accuracy for dataset PCA(/4) ukbench(Full) : %.4f" % score
+var = "Time taken : %f seconds" %(datetime.now()-start).total_seconds()
+print(var)
+score_string = "Accuracy for dataset pca6632dim_features_norm_hsv_vgg_ukbench_sklearn (FaissIP,wth IP top 8): %.4f" % score
 with open('accuracy.txt','a') as f:
-    f.write(score_string)
+    f.write(score_string+" (" + var + ")\n")
 
 print("Accuracy : %.3f" % score)
