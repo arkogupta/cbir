@@ -14,5 +14,5 @@ Accuracy for dataset PCA(/4) ukbench(full) (bug removed in impure): 2.1418
 
 
 WITHOUT FAISS:
-Accuracy for dataset ukbench(full) hsv (Manhatten) : 2.5809
-
+Accuracy for dataset ukbench(full) hsv (Manhattan) : 2.5809
+Accuracy for dataset ukbench(full) hsv (Cosine) : 2.411
