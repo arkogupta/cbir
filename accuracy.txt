@@ -1,16 +1,18 @@
+--------------------------------------UKBENCH----------------------------------------
 WITH FAISS
+
 Accuracy for dataset PCA(/4) ukbench(118) : 2.2966
 Accuracy for dataset PCA(/4) ukbench(118) w/o top 8 : 2.1102
 Accuracy for dataset PCA(/4) ukbench(full) : 1.4962
 Accuracy for dataset PCA(/4) ukbench(full) (bug removed in impure): 2.1418
 Accuracy for dataset PCA(/4) ukbench(full) w/o top 8 : 2.1418
-Accuracy for dataset PCA(/4) ukbench(full) (FaissIP,wth IP top 8): 3.1814 (Time taken : 28.274462 seconds)
+**Accuracy for dataset PCA(/4) ukbench(full) (FaissIP,wth IP top 8): 3.1814 (Time taken : 28.274462 seconds)
 Accuracy for dataset ukbench(full) (vgg,FaissL2,w/o top 8) : 2.0856
 Accuracy for dataset ukbench(full) (vgg,FaissIP,w/o IP top 8): 2.6144 (Time taken : 72.226941 seconds)
-Accuracy for dataset ukbench(full) (vgg,FaissIP,with IP top 8): 3.1412 (Time taken : 111.330623 seconds)
+**Accuracy for dataset ukbench(full) (vgg,FaissIP,with IP top 8): 3.1412 (Time taken : 111.330623 seconds)
 Accuracy for dataset features_ukbench_hsv.hdf5 (vgg,FaissL2,L2 top 8): 2.4108
 Accuracy for dataset features_ukbench_hsv (vgg,FaissIP,IP top 8): 2.4108 (Time taken : 14.933291 seconds)
-Accuracy for dataset features_ukbench_hsv.hdf5 w/o top 8: 2.4108
+**Accuracy for dataset features_ukbench_hsv.hdf5 w/o top 8: 2.4108
 Accuracy for dataset features_ukbench_hsv_vgg : 1.7357
 Accuracy for dataset features_ukbench_hsv_vgg w/o top 8 : 2.0856
 Accuracy for dataset PCA(10114 dim) norm_hsv_vgg_ukbench (FaissIP,IP top 8): 2.1625 (Time taken : 40.063984 seconds)
@@ -30,3 +32,43 @@ WITHOUT FAISS:
 Accuracy for dataset ukbench(full) hsv (Manhattan) : 2.5809
 Accuracy for dataset ukbench(full) hsv (Cosine) : 2.411
 Accuracy for dataset ukbench(full) hsv_vgg (non faiss,non pca,cosine): 2.1578
+
+
+
+
+--------------------------------------OXFORD5K----------------------------------------
+Mean Avg Precision (mAP):
+
+WITHOUT FAISS : 
+VGG16 without PCA : 0.42496
+HSV :
+VGG16 + HSV :
+VGG16 with PCA : 
+VGG16 with PCA + HSV :
+
+WITH FAISS :
+VGG16 without PCA : 
+HSV :
+VGG16 + HSV :
+VGG16 with PCA : 
+VGG16 with PCA + HSV :
+
+
+
+
+--------------------------------------PARIS6K----------------------------------------
+Mean Avg Precision (mAP):
+
+WITHOUT FAISS : 
+VGG16 without PCA : 
+HSV :
+VGG16 + HSV :
+VGG16 with PCA : 
+VGG16 with PCA + HSV :
+
+WITH FAISS :
+VGG16 without PCA : 
+HSV :
+VGG16 + HSV :
+VGG16 with PCA : 
+VGG16 with PCA + HSV :
