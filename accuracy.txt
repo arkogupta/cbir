@@ -60,9 +60,9 @@ VGG16 with PCA + HSV :
 Mean Avg Precision (mAP):
 
 WITHOUT FAISS : 
-VGG16 without PCA : 
-HSV :
-VGG16 + HSV :
+VGG16 without PCA : 0.53171
+HSV : 0.05977 (-_-)
+VGG16 + HSV : 
 VGG16 with PCA : 
 VGG16 with PCA + HSV :
 
