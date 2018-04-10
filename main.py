@@ -1,36 +1,36 @@
-# import os
+import os
 # import cv2
-# import h5py
-# import glob
+import h5py
+import glob
 # import datetime
-# import argparse
+import argparse
 import numpy as np
 import faiss_index
 # from feature_extractor import get_feature_file
 # Parse the arguments
-'''
+
+
 ap = argparse.ArgumentParser()
-ap.add_argument('-q', '--query', required=True, help='Path to the query image')
+# ap.add_argument('-q', '--query', required=True, help='Path to the query image')
 ap.add_argument('-i', '--index', required=True, help='Path to the index file')
 ap.add_argument("-d", "--dataset", required=True, help="Path to the directory that contains images to be indexed")
 args = vars(ap.parse_args())
 
 # get info from the arguments
-_img_path = args['query']
+# _img_path = args['query']
 _index_file = args['index']
 _dataset = args['dataset']
-'''
+
 
 # performance tester
-_index_file = '/home/dinesh/Documents/pca6632dim_features_norm_hsv_vgg_ukbench_sklearn.hdf5'
-_dataset = '/media/dinesh/dinesh/C/Documents/BTP/ukbench/ukbench/full'
-_img_path = 0
+# _index_file = '/home/dinesh/Documents/pca6632dim_features_norm_hsv_vgg_ukbench_sklearn.hdf5'
+# _dataset = '/media/dinesh/dinesh/C/Documents/BTP/ukbench/ukbench/full'
+# _img_path = 0
+
 itms,idx = faiss_index.build_index(_index_file)
 print('indexing successfully done...\n')
 
 '''
-
-    Deprecated function using L2 without indexing
 
 def get_results(img_path, index_file):
     # init dict of results and retrieve query features
@@ -54,6 +54,8 @@ def get_results(img_path, index_file):
 
 # code for finding top 8 out of 100
 # def get_better_results(itms,results):
+
+
 def get_better_results(results):
     # (score,index)
     better_results = np.zeros((len(results),2))
@@ -65,7 +67,7 @@ def get_better_results(results):
     result_feature = (np.float32(itms[idx]) for score,idx in results)
     from itertools import starmap,izip
     # distance = lambda x,y:(np.sqrt(np.sum(np.square(abs(x-y)))))
-    distance = lambda x,y : 1 - np.inner(x,y)/(np.sqrt(np.inner(x,x))*np.sqrt(np.inner(y,y)))
+    distance = lambda x,y: 1 - np.inner(x,y)/(np.sqrt(np.inner(x,x))*np.sqrt(np.inner(y,y)))
     temp = izip((query_image_feature for i in xrange(len(results))), result_feature)
     better_results[:,0] = np.fromiter(starmap(distance,temp),'float32')
     # better_results[:,1] = np.fromiter((idx for score,idx in results),'int')
@@ -73,6 +75,7 @@ def get_better_results(results):
     better_results = better_results[better_results[:,0].argsort()]
     # return better_results[:8]
     return better_results[:4, 1]
+
 
 def get_results_faiss():
     
@@ -99,6 +102,60 @@ def get_results_faiss():
     # return np.array(results)[:, :4, 1]
     better_results = map(get_better_results,(arr for arr in results))
     return better_results
+
+
+
+def get_names_from_idx(dataset):
+
+
+    with open('corrupt.txt') as f:
+        corrupt_files = f.readlines()
+
+    corrupt_files = [x.strip('\n') for x in corrupt_files]
+    path = r"C:\Users\Arko\PycharmProjects\datasets\paris"
+    corrupt_files = [path + os.path.sep + x for x in corrupt_files]
+
+    idx_to_name = []
+    i = 0
+    for img_name in glob.glob(dataset + os.path.sep +'*.jpg'):
+        if img_name in corrupt_files:
+            continue
+        idx_to_name[i] = img_name[img_name.rfind(os.path.sep) + 1:img_name.rfind('.')]
+        i+=1
+
+    return  idx_to_name
+
+
+def get_ranking_faiss(query_file, index_file, ranking_path, dataset):
+
+    f = open(query_file,'r')
+    queries = f.readlines()
+    queries = [x.strip('\n') for x in queries]
+    h = h5py.File(index_file, 'r')
+    dim = 25088
+    xq = np.zeros((55,dim))
+    i = 0
+    for query in queries:
+        key = query + '.jpg'
+        xq[i] = np.array(h[key])
+        i+=1
+
+    dist_matrix, ind_matrix = idx.search(xq,5000) # check this
+    idx_to_name = get_names_from_idx(dataset)
+    for i in range(0, len(queries)):
+        res = ind_matrix[i]
+        query = queries[i]
+        with open(ranking_path + os.path.sep + query + '.txt') as f:
+            for j in range(0, len(res)):
+                id = res[j]
+                file_name = idx_to_name[id]
+                f.write(file_name + '\n')
+
+
+get_ranking_faiss('list_queries_oxford.txt', _index_file, r'ranking_oxford/vgg_faiss', _dataset)
+
+
+
 
 
 '''
