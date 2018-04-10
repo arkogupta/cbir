@@ -47,7 +47,8 @@ VGG16 with PCA :
 VGG16 with PCA + HSV :
 
 WITH FAISS :
-VGG16 without PCA : 
+VGG16 without PCA : (index_flat_L2 : 0.03013)
+VGG16 without PCA : (index_flat_IP : )
 HSV :
 VGG16 + HSV :
 VGG16 with PCA : 
