@@ -10,6 +10,9 @@ Accuracy for dataset PCA(/4) ukbench(full) w/o top 8 : 2.1418
 Accuracy for dataset ukbench(full) (vgg,FaissL2,w/o top 8) : 2.0856
 Accuracy for dataset ukbench(full) (vgg,FaissIP,w/o IP top 8): 2.6144 (Time taken : 72.226941 seconds)
 **Accuracy for dataset ukbench(full) (vgg,FaissIP,with IP top 8): 3.1412 (Time taken : 111.330623 seconds)
+Accuracy for dataset ukbench(full) (Pre rotated,vgg,FaissIP,with IP top 8 on vgg): 3.111 (Time Taken : 70494.582936 sec)
+Accuracy for dataset ukbench(full) (Pre rotated,vgg,FaissIP,with IP top 8 on hsv): 2.812 (Time taken : 70989.010876 seconds)
+Accuracy for dataset ukbench(full) (vgg,FaissIP,with IP top 8 on hsv): 2.882 (Time taken : 10.24 seconds)
 Accuracy for dataset features_ukbench_hsv.hdf5 (vgg,FaissL2,L2 top 8): 2.4108
 Accuracy for dataset features_ukbench_hsv (vgg,FaissIP,IP top 8): 2.4108 (Time taken : 14.933291 seconds)
 **Accuracy for dataset features_ukbench_hsv.hdf5 w/o top 8: 2.4108
