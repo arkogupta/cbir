@@ -52,7 +52,7 @@ VGG16 with PCA + HSV :
 WITH FAISS :
 VGG16 without PCA : (index_flat_L2 : 0.22535)
 VGG16 without PCA : (index_flat_IP : 0.32478)
-HSV : 
+HSV : 0.10324
 VGG16 + HSV : 0.36475 (index_flat_IP)
 VGG16 with PCA : 
 VGG16 with PCA + HSV :
@@ -66,13 +66,13 @@ Mean Avg Precision (mAP):
 WITHOUT FAISS : (cosine)
 VGG16 without PCA : 0.53171
 HSV : 0.05977 (-_-)
-VGG16 + HSV : 
+VGG16 + HSV : 0.51646 
 VGG16 with PCA : 
 VGG16 with PCA + HSV :
 
 WITH FAISS :
 VGG16 without PCA : 0.43867 (index_flat_IP)
-HSV : 0.05972 ( '' )
-VGG16 + HSV : 0.48286 (index_flat_IP)
+HSV : 0.05972 ( " )
+VGG16 + HSV : 0.48286 ( " )
 VGG16 with PCA : 
 VGG16 with PCA + HSV :
