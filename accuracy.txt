@@ -72,7 +72,7 @@ VGG16 with PCA + HSV :
 
 WITH FAISS :
 VGG16 without PCA : 0.43867 (index_flat_IP)
-HSV : 0.05972 
-VGG16 + HSV :
+HSV : 0.05972 ( '' )
+VGG16 + HSV : 0.48286 (index_flat_IP)
 VGG16 with PCA : 
 VGG16 with PCA + HSV :
