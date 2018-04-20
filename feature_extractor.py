@@ -24,7 +24,9 @@ def get_feature_file(feature_file):
     h = h5py.File(feature_file,'r')
     # hardcoded
     m,dim = h.__len__(),6632
+    xy = np.fromiter((int(imageName[:imageName.rfind('.')]) for imageName,feature in h.iteritems()),'int')
     xb = np.fromiter(chain.from_iterable(np.array(feature) for imageName,feature in h.iteritems()),'float32')
     xb.shape = m,dim    
+    xb = xb[xy.argsort()]
     return np.float32(xb)
     
