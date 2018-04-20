@@ -46,7 +46,7 @@ WITHOUT FAISS : (cosine)
 VGG16 without PCA : 0.42496
 HSV : 0.10324
 VGG16 + HSV : 0.40722
-VGG16 with PCA : 
+VGG16 with PCA : 0.43628
 VGG16 with PCA + HSV :
 
 WITH FAISS :
